@@ -48,7 +48,7 @@ def log_in(request):
                messages.success(request,f'Welcome back{user.username}!')
                return redirect('log_in')
         else:
-               messages.error(request,'Email or Password does not exist')
+               messages.error(request,'Emails or Password does not exist')
 
     return render(request,'firstpage.html')
 
