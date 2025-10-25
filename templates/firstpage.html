@@ -510,30 +510,38 @@
                 </div>
             </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            <!-----------------------------------------RIGHT--------------------------------->
             <div class="right">
+              <div class="messages">
+                  <div class="heading">
+                      <h4>Messages</h4><i class="fa-solid fa-pen-to-square"></i>
+                  </div>
+                  <!------------------------SEARCH BAR----------------------------->
+                  <div class="search-bar">
+                      <i class="fa-solid fa-magnifying-glass"></i>
+                      <input type="search" placeholder="Search messages" id="message-search">
+                  </div>
+                  <!----------------------------------------MESSAGES-CATEGORY-------->
+                  <div class="category">
+                      <h6 class="active">Primary</h6>
+                      <h6>General</h6>
+                      <h6 class="message-request">Request(7)</h6>
+                  </div>
+                  <!---------------------------------MESSAGES-------------------->
+                  <div class="message">
+                      <div class="profile-photo">
+                          <img src="{% static './images/profile-17.jpg' %}">
+                      </div>
+                      <div class="message-body">
+                          <h5>Edem Quist</h5>
+                          <p class="text-muted">Just woke up</p>
+                      </div>
+                  </div>
+              </div>
+              <!--------------------------------END OF MESSAGES--------------------------->
 
+
+              <!---------------------------------FRIEND REQUEST--------------------------->
             </div>
         </div>
 
