@@ -478,3 +478,17 @@ main .container .right{
  border-color: var(--color-dark);
 }
 
+.right .messages .message{
+ display: flex;
+ gap: 1rem;
+ margin-bottom: 1rem;
+ align-items: start;
+}
+
+.right .messages .message:last-child{
+ margin: 0;
+}
+
+.right .messages .message p{
+ font-size: 0.8rem;
+}
