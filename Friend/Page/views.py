@@ -32,31 +32,40 @@ def register(request):
 def firstpage(request):
     return render(request,'firstpage.html')
 
+
 def log_in(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
 
         try:
+            # Try to find user with this email
             user_obj = User.objects.get(email=email)
-            user=authenticate(request,username=user_obj.username,password=password)
         except User.DoesNotExist:
-            user= None
+            user_obj = None
 
-        if user is not None:
-               login(request,user)
-               messages.success(request,f'Welcome back{user.username}!')
-               return redirect('log_in')
+        if user_obj is not None:
+            # Authenticate using username since Django default auth uses username
+            user = authenticate(request, username=user_obj.username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.success(request, f'Welcome back, {user.username}!')
+                return redirect('firstpage')  # ✅ valid login → go home
+            else:
+                messages.error(request, 'Incorrect password.')
+                return render(request, 'register.html')  # ✅ stay on login page
         else:
-               messages.error(request,'Emails or Password does not exist')
+            messages.error(request, 'No user found with this email.')
+            return render(request, 'register.html')  # ✅ stay on login page
 
-    return render(request,'firstpage.html')
+    # If it's a GET request, show login page
+    return render(request, 'register.html')
+
 
 def log_out(request):
     logout(request)
     messages.success(request,'You have been logged out')
     return redirect('log_in')
-
 
 
 
