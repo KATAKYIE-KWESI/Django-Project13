@@ -50,13 +50,13 @@ def log_in(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, f'Welcome back, {user.username}!')
-                return redirect('firstpage')  # ✅ valid login → go home
+                return redirect('firstpage')  #  valid login → go home
             else:
                 messages.error(request, 'Incorrect password.')
-                return render(request, 'register.html')  # ✅ stay on login page
+                return render(request, 'register.html')  #  stay on login page
         else:
             messages.error(request, 'No user found with this email.')
-            return render(request, 'register.html')  # ✅ stay on login page
+            return render(request, 'register.html')  #  stay on login page
 
     # If it's a GET request, show login page
     return render(request, 'register.html')
@@ -65,7 +65,7 @@ def log_in(request):
 def log_out(request):
     logout(request)
     messages.success(request,'You have been logged out')
-    return redirect('log_in')
+    return redirect('register')
 
 
 
