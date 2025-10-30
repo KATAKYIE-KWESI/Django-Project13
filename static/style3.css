@@ -1,0 +1,83 @@
+/* ============ THEME VARIABLES ============ */
+:root {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  --card-bg: #f8f8f8;
+  --border-color: #e0e0e0;
+}
+
+body.dark-mode {
+  --bg-color: #121212;
+  --text-color: #ffffff;
+  --card-bg: #1e1e1e;
+  --border-color: #333333;
+}
+
+/* Apply colors globally */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Sidebar, cards, and containers */
+.sidebar, .card, .feed, .right, nav, .create-post {
+  background-color: var(--card-bg) !important;
+  color: var(--text-color) !important;
+  border-color: var(--border-color) !important;
+  transition: background 0.3s ease, color 0.3s ease, border 0.3s ease;
+}
+
+/* Floating dark mode toggle button */
+#theme-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--text-color);
+  color: var(--bg-color);
+  border: none;
+  border-radius: 50%;
+  padding: 10px 14px;
+  font-size: 18px;
+  cursor: pointer;
+  z-index: 9999;
+  transition: transform 0.2s ease, opacity 0.3s ease;
+}
+#theme-toggle:hover {
+  transform: scale(1.1);
+  opacity: 0.9;
+}
+
+/* --- DARK MODE FIXES FOR RIGHT SIDEBAR --- */
+body.dark-mode .right,
+body.dark-mode .right .messages,
+body.dark-mode .right .friend-requests,
+body.dark-mode .right .request {
+  background-color: #1e1e1e !important;
+  color: #ffffff !important;
+}
+
+/* make message text visible */
+body.dark-mode .right .messages p,
+body.dark-mode .right .messages h6,
+body.dark-mode .right .messages small,
+body.dark-mode .right .friend-requests h4,
+body.dark-mode .right .request .info {
+  color: #ffffff !important;
+}
+
+/* lighten the search bar */
+body.dark-mode .right .search-bar {
+  background-color: #2a2a2a !important;
+  border-radius: 10px;
+}
+
+body.dark-mode .right .search-bar input::placeholder {
+  color: #bbb !important;
+}
+
+/* optional: white divider line */
+body.dark-mode .right .messages .category h6 {
+  border-color: #444 !important;
+}
+

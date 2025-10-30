@@ -63,9 +63,11 @@
                <a href="#">Forget Your Password?</a>
                <button type="submit">Sign In</button>
                {% if messages %}
+                <div id ="popup-container">
                  {% for message in messages %}
                    <p> {{ message }}</p>
                  {% endfor %}
+                </div>
                {% endif %}
            </form>
        </div>
@@ -86,5 +88,6 @@
    </div>
 
    <script src="{% static 'script.js' %}"></script>
+   <script src="{% static 'script2.js' %}"></script>
 </body>
 </html>

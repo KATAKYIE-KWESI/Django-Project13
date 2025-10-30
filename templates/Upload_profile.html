@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h2>Update Profile Picture</h2>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Upload</button>
+</form>
+
+{% if user.profile.profile_pic %}
+    <p>Current Profile Picture:</p>
+    <img src="{{ user.profile.profile_pic.url }}" width="120" height="120" style="border-radius: 50%;">
+{% endif %}
+
+</body>
+</html>
