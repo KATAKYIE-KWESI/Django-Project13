@@ -46,12 +46,16 @@
             <div class="left">
               <a class="profile">
                   <div class="profile-photo">
-                      <img src="{% static 'images/profile-1.jpg' %}">
+                    {% if user.profile.profile_pic %}
+                      <img src="{{ user.profile.profile_pic.url }}" alt="Profile Picture">
+                    {% else %}
+                      <img src="{% static 'images/profile-1.jpg' %}" alt="Profile Picture">
+                    {% endif %}
                   </div>
                   <div class="handle">
-                      <h4>Diana Ayi</h4>
+                      <h4>{{ user.username }}</h4>
                       <p class="text-muted">
-                          @dayi
+                          @{{ user.username }}
                       </p>
                   </div>
               </a>

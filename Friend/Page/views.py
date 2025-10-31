@@ -1,10 +1,8 @@
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import ProfilePicForm
-from .models import Profile  # ✅ import the model (not the module)
-
+from .models import Profile
 
 def register(request):
     if request.method == 'POST':
@@ -74,13 +72,22 @@ def log_out(request):
 from django.shortcuts import render, redirect
 from .forms import ProfilePicForm
 
+
+
+@login_required
 def upload_profile_pic(request):
+    # Ensure the user has a profile (just in case)
+    profile, created = Profile.objects.get_or_create(user=request.user)
+
     if request.method == 'POST':
-        form = ProfilePicForm(request.POST, request.FILES, instance=request.user.profile)
+        form = ProfilePicForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
+            messages.success(request, "Profile picture updated successfully! Please refresh the page to see changes.")
             return redirect('upload_profile_pic')
+        else:
+            messages.error(request, "There was an error updating your profile picture.")
     else:
-        form = ProfilePicForm(instance=request.user.profile)
+        form = ProfilePicForm(instance=profile)
 
-    return render(request, 'Upload_profile.html', {'form': form})  # ✅ correct filename
+    return render(request, 'Upload_profile.html', {'form': form})

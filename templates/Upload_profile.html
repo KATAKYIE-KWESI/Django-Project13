@@ -1,21 +1,28 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Update Profile Picture</title>
+    <link rel="stylesheet" href="{% static 'styles4.css' %}">
 </head>
 <body>
     <h2>Update Profile Picture</h2>
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Upload</button>
-</form>
 
-{% if user.profile.profile_pic %}
-    <p>Current Profile Picture:</p>
-    <img src="{{ user.profile.profile_pic.url }}" width="120" height="120" style="border-radius: 50%;">
-{% endif %}
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Upload</button>
 
+        <!-- 🟡 Add this message -->
+        <p class="note">
+            Note: After uploading, please go back and refresh the page to see your new profile picture.
+        </p>
+    </form>
+
+    {% if user.profile.profile_pic %}
+        <p>Current Profile Picture:</p>
+        <img src="{{ user.profile.profile_pic.url }}" width="120" height="120" style="border-radius: 50%;">
+    {% endif %}
 </body>
 </html>

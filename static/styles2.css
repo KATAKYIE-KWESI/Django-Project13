@@ -231,6 +231,7 @@ main .container .left .profile{
 }
 
 
+
 /*.left .sidebar .menu-item:last-child:not(.active){
  border-bottom-left-radius: var(--card-border-radius);
  overflow: hidden;
