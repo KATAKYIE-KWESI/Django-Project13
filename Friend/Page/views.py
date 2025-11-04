@@ -1,8 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Profile
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
+from .forms import PostForm
+
 
 def register(request):
     if request.method == 'POST':
@@ -91,3 +94,29 @@ def upload_profile_pic(request):
         form = ProfilePicForm(instance=profile)
 
     return render(request, 'Upload_profile.html', {'form': form})
+
+
+from django.shortcuts import render, redirect
+from .models import Post
+
+def firstpage(request):
+    posts = Post.objects.all().order_by('-created_at')
+    return render(request, 'firstpage.html', {'posts': posts})
+
+def create_post(request):
+    if request.method == 'POST':
+        caption = request.POST.get('caption')
+        image = request.FILES.get('image')
+        Post.objects.create(user=request.user, caption=caption, image=image)
+        return redirect('firstpage')
+    return redirect('firstpage')
+
+
+
+@login_required
+def delete_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id, user=request.user)
+    if request.method == 'POST':
+        post.delete()
+        return redirect('firstpage')
+    return render(request, 'confirm_delete.html', {'post': post})
