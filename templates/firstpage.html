@@ -197,9 +197,11 @@
                  <form method="POST" action="{% url 'create_post' %}" enctype="multipart/form-data" class="create-post">
                       {% csrf_token %}
                       <div class="profile-photo">
-                        <img src="{{ user.profile.profile_pic.url }}">
+
+
+
                       </div>
-                      <input type="text" name="caption" placeholder="What's on your mind, {{ user.username }}?" required>
+                      <input type="text" name="caption" placeholder="What's on your mind?" required>
                       <input type="file" name="image" accept="image/*">
                       <input type="submit" value="Post" class="btn btn-primary">
                  </form>
@@ -679,69 +681,35 @@
 
 
               <!---------------------------------FRIEND REQUEST--------------------------->
-              <div class="friend-requests"></div>
-                 <h4>Requests</h4>
-                 <div class="request">
-                     <div class="info">
-                         <div class="profile-photo">
-                             <img src="{% static './images/profile-13.jpg' %}">
-                         </div>
-                         <div>
-                             <h5>Fermin Lopez</h5>
-                             <p class="text-muted">8 mutual friends</p>
+              <div class="friend-requests">
+                    <h4>All Users</h4>
 
-                             </div>
-                         </div>
-                         <div class="action">
-                                 <button class="btn btn primary">
-                                     Accept
-                                 </button>
-                                 <button class="btn btn-primary">
-                                     Decline
-                                 </button>
-                         </div>
-                 </div>
-                 <div class="request">
-                     <div class="info">
-                         <div class="profile-photo">
-                             <img src="{% static './images/profile-12.jpg' %}">
-                         </div>
-                         <div>
-                             <h5>Brahim Diaz</h5>
-                             <p class="text-muted">8 mutual friends</p>
+                    {% for u in users %}
+                    <div class="request">
+                        <div class="info">
+                            <div class="profile-photo">
+                                <img src="{{ u.profile.profile_pic.url }}" alt="{{ u.username }}">
+                            </div>
 
-                             </div>
-                         </div>
-                         <div class="action">
-                                 <button class="btn btn primary">
-                                     Accept
-                                 </button>
-                                 <button class="btn btn-primary">
-                                     Decline
-                                 </button>
-                         </div>
-                 </div>
-                 <div class="request">
-                     <div class="info">
-                         <div class="profile-photo">
-                             <img src="{% static './images/profile-14.jpg' %}">
-                         </div>
-                         <div>
-                             <h5>Joshua Selma</h5>
-                             <p class="text-muted">8 mutual friends</p>
+                            <div>
+                                <h5>{{ u.username }}</h5>
+                                <p class="text-muted">@{{ u.username }}</p>
+                            </div>
+                        </div>
 
-                             </div>
-                         </div>
-                         <div class="action">
-                                 <button class="btn btn primary">
-                                     Accept
-                                 </button>
-                                 <button class="btn btn-primary">
-                                     Decline
-                                 </button>
-                         </div>
-                 </div>
+                        <div class="action">
+                            {% if u.id in pending_sent %}
+                                <button class="btn btn-primary" disabled>Request Sent</button>
+                            {% else %}
+                                <a href="{% url 'send_request' u.id %}" class="btn btn-primary">Add Friend</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+
+              </div>
             </div>
+
         </div>
 
     </main>

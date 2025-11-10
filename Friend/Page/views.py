@@ -120,3 +120,59 @@ def delete_post(request, post_id):
         post.delete()
         return redirect('firstpage')
     return render(request, 'confirm_delete.html', {'post': post})
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .models import Post, Profile, FriendRequest
+from .forms import ProfilePicForm
+
+from django.contrib.auth.models import User
+from .models import Post, FriendRequest
+
+@login_required
+def firstpage(request):
+    posts = Post.objects.all().order_by('-created_at')
+    users = User.objects.exclude(id=request.user.id)
+
+    # Get receivers of pending friend requests sent by the current user
+    pending_sent = FriendRequest.objects.filter(sender=request.user, status='pending').values_list('receiver_id', flat=True)
+
+    friend_requests = request.user.received_requests.filter(status='pending')
+
+    return render(request, 'firstpage.html', {
+        'posts': posts,
+        'users': users,
+        'friend_requests': friend_requests,
+        'pending_sent': list(pending_sent),
+    })
+
+@login_required
+def send_request(request, user_id):
+    receiver = get_object_or_404(User, id=user_id)
+    if FriendRequest.objects.filter(sender=request.user, receiver=receiver, status='pending').exists():
+        messages.warning(request, 'Friend request already sent.')
+    else:
+        FriendRequest.objects.create(sender=request.user, receiver=receiver)
+        messages.success(request, f'Friend request sent to {receiver.username}')
+    return redirect('firstpage')
+
+@login_required
+def accept_request(request, request_id):
+    fr = get_object_or_404(FriendRequest, id=request_id, receiver=request.user)
+    fr.status = 'accepted'
+    fr.save()
+    messages.success(request, f'You are now friends with {fr.sender.username}')
+    return redirect('firstpage')
+
+@login_required
+def decline_request(request, request_id):
+    fr = get_object_or_404(FriendRequest, id=request_id, receiver=request.user)
+    fr.status = 'declined'
+    fr.save()
+    messages.info(request, f'You declined friend request from {fr.sender.username}')
+    return redirect('firstpage')
+
+
