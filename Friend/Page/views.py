@@ -72,8 +72,6 @@ def log_out(request):
     messages.success(request, 'You have been logged out')
     return redirect('register')
 
-from django.shortcuts import render, redirect
-from .forms import ProfilePicForm
 
 
 
@@ -96,8 +94,6 @@ def upload_profile_pic(request):
     return render(request, 'Upload_profile.html', {'form': form})
 
 
-from django.shortcuts import render, redirect
-from .models import Post
 
 def firstpage(request):
     posts = Post.objects.all().order_by('-created_at')

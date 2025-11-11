@@ -622,3 +622,13 @@ main .container .right{
   background-color: #ffe6e6;
   color: #d60000;
 }
+
+.action-buttons {
+    display: flex;
+    gap: 10px; /* space between buttons */
+}
+
+.action-buttons .btn {
+    flex: 1; /* optional: makes both buttons same width */
+    text-align: center;
+}
