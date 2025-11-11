@@ -40,7 +40,7 @@
 
     </nav>
        {% if messages %}
-      <div class="messages-container" style="margin: 10px 20px;">
+      <div class="messages-container"  id="messages-container" style="margin: 10px 20px;">
         {% for message in messages %}
           <div
             class="message {{ message.tags }}"
