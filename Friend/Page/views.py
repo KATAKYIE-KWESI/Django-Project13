@@ -124,26 +124,34 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Post, Profile, FriendRequest
 from .forms import ProfilePicForm
-
 from django.contrib.auth.models import User
 from .models import Post, FriendRequest
+from .models import Notification
 
 @login_required
 def firstpage(request):
     posts = Post.objects.all().order_by('-created_at')
     users = User.objects.exclude(id=request.user.id)
 
-    # Get receivers of pending friend requests sent by the current user
-    pending_sent = FriendRequest.objects.filter(sender=request.user, status='pending').values_list('receiver_id', flat=True)
-
+    # Received friend requests
     friend_requests = request.user.received_requests.filter(status='pending')
+
+    # Sent requests (to show status)
+    sent_requests = FriendRequest.objects.filter(sender=request.user)
+
+    # Notifications for current user
+    notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
+    unread_count = notifications.count()
 
     return render(request, 'firstpage.html', {
         'posts': posts,
         'users': users,
         'friend_requests': friend_requests,
-        'pending_sent': list(pending_sent),
+        'sent_requests': sent_requests,
+        'notifications': notifications,
+        'unread_count': unread_count,
     })
+
 
 @login_required
 def send_request(request, user_id):
@@ -155,20 +163,47 @@ def send_request(request, user_id):
         messages.success(request, f'Friend request sent to {receiver.username}')
     return redirect('firstpage')
 
+from .models import Notification
+
+#Accept and Decline with Notifications integrated
+
 @login_required
 def accept_request(request, request_id):
     fr = get_object_or_404(FriendRequest, id=request_id, receiver=request.user)
     fr.status = 'accepted'
-    fr.save()
+    fr.save(update_fields=['status'])
+
+    # Create notification for sender
+    Notification.objects.create(
+        user=fr.sender,
+        message=f"{request.user.username} accepted your friend request!"
+    )
+
     messages.success(request, f'You are now friends with {fr.sender.username}')
     return redirect('firstpage')
+
 
 @login_required
 def decline_request(request, request_id):
     fr = get_object_or_404(FriendRequest, id=request_id, receiver=request.user)
     fr.status = 'declined'
-    fr.save()
+    fr.save(update_fields=['status'])
+
+    # Create notification for sender
+    Notification.objects.create(
+        user=fr.sender,
+        message=f"{request.user.username} declined your friend request."
+    )
+
     messages.info(request, f'You declined friend request from {fr.sender.username}')
     return redirect('firstpage')
 
+
+#Notifications view
+@login_required
+def notifications_view(request):
+    notifications = Notification.objects.filter(user=request.user).order_by('-created_at')
+    # Mark all as read when user opens page
+    notifications.update(is_read=True)
+    return render(request, 'notifications.html', {'notifications': notifications})
 

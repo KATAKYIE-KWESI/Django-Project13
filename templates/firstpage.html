@@ -96,8 +96,17 @@
                   </a>
 
 
-                  <a  class="menu-item" id="notifications">
-                     <span><i class="fa-solid fa-bell"><small class="notification-count">9+</small></i></span> <h3>Notifications</h3>
+                  <a class="menu-item" id="notifications" href="{% url 'notifications' %}">
+                        <span>
+                            <i class="fa-solid fa-bell">
+                                {% if unread_count > 0 %}
+                                    <small class="notification-count">{{ unread_count }}</small>
+                                {% endif %}
+                            </i>
+                        </span>
+                        <h3>Notifications</h3>
+                  </a>
+
                       <!------------Notifications Popup---------------->
                         <div class="notifications-popup">
                           <div>

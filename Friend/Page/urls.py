@@ -17,4 +17,6 @@ urlpatterns = [
     path('accept-request/<int:request_id>/', views.accept_request, name='accept_request'),
     path('decline-request/<int:request_id>/', views.decline_request, name='decline_request'),
 
+    #Notifications
+    path('notifications/', views.notifications_view, name='notifications'),
 ]

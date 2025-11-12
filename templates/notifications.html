@@ -1,0 +1,43 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications</title>
+
+    <!-- Link to external CSS -->
+    <link rel="stylesheet" href="{% static 'styles5.css' %}">
+
+    <!-- Font Awesome for bell icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="notifications-container">
+        <h2>Notifications</h2>
+        <ul class="notifications-list">
+            {% for n in notifications %}
+                <li class="notification-item {% if not n.is_read %}unread{% endif %}">
+                    <div class="notification-left">
+                        {% if n.sender.profile.profile_pic %}
+                            <img src="{{ n.sender.profile.profile_pic.url }}" alt="{{ n.sender.username }}" class="notification-avatar">
+                        {% else %}
+                            <img src="{% static 'profile_pic/default.jpg' %}" alt="{{ n.sender.username }}" class="notification-avatar">
+                        {% endif %}
+                    </div>
+                    <div class="notification-content">
+                        <strong>{{ n.message }}</strong>
+                        <small>{{ n.created_at|timesince }} ago</small>
+                    </div>
+                </li>
+            {% empty %}
+                <li class="notification-item empty">No new notifications.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+
+</body>
+</html>
