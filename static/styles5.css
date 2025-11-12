@@ -1,7 +1,8 @@
 body {
     margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f6fa;
+    background-color: #c9d6ff;
+    background: linear-gradient(to right,#e2e2e2,#c9d6ff);
 }
 
 .notifications-container {
