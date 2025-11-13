@@ -206,4 +206,3 @@ def notifications_view(request):
     # Mark all as read when user opens page
     notifications.update(is_read=True)
     return render(request, 'notifications.html', {'notifications': notifications})
-
