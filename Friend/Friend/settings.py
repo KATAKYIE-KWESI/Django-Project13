@@ -10,20 +10,19 @@ from pathlib import Path
 # ============================
 # BASE DIRECTORY
 # ============================
-# Correct BASE_DIR should be 2 parents above (not 3)
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # ============================
 # SECURITY SETTINGS
 # ============================
+# Secret key from environment (set in Render)
 SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
 
-# Automatically turn off DEBUG on Render
-DEBUG = os.environ.get("RENDER", False) != "true"
+# Debug off on Render
+DEBUG = os.environ.get("RENDER") != "true"
 
-ALLOWED_HOSTS = ['*']  # Render uses dynamic hosts
-
+# Allowed hosts: use Render host if available
+ALLOWED_HOSTS = [os.environ.get("RENDER_EXTERNAL_HOSTNAME", "localhost")]
 
 # ============================
 # INSTALLED APPS
@@ -35,9 +34,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Page',
+    'Page',  # Your app
 ]
-
 
 # ============================
 # MIDDLEWARE
@@ -56,13 +54,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-
 # ============================
 # URL + WSGI
 # ============================
 ROOT_URLCONF = 'Friend.urls'
 WSGI_APPLICATION = 'Friend.wsgi.application'
-
 
 # ============================
 # TEMPLATES
@@ -82,11 +78,10 @@ TEMPLATES = [
     },
 ]
 
-
 # ============================
 # DATABASE CONFIG
 # ============================
-# Default (local) database: SQLite
+# Default: SQLite
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -94,7 +89,7 @@ DATABASES = {
     }
 }
 
-# If Render provides DATABASE_URL, overwrite with PostgreSQL
+# Overwrite with Postgres if DATABASE_URL provided (Render)
 DATABASE_URL = os.environ.get("DATABASE_URL")
 if DATABASE_URL:
     DATABASES['default'] = dj_database_url.config(
@@ -102,7 +97,6 @@ if DATABASE_URL:
         conn_max_age=600,
         ssl_require=True
     )
-
 
 # ============================
 # PASSWORD VALIDATION
@@ -114,7 +108,6 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-
 # ============================
 # INTERNATIONALIZATION
 # ============================
@@ -122,7 +115,6 @@ LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
-
 
 # ============================
 # STATIC FILES
@@ -132,12 +124,11 @@ STATIC_URL = '/static/'
 # Where collectstatic puts files
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Your development/static folder
+# Additional static files folder (dev)
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
-# Whitenoise storage
+# Whitenoise storage for production
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
 
 # ============================
 # MEDIA FILES
@@ -145,14 +136,21 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-
 # ============================
 # LOGIN URL
 # ============================
 LOGIN_URL = '/log_in/'
 
-
 # ============================
 # DEFAULT PRIMARY KEY FIELD
 # ============================
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ============================
+# Render-specific notes
+# ============================
+# 1. Add Render environment variables:
+#    - SECRET_KEY
+#    - DATABASE_URL (optional if using Postgres)
+# 2. Start command on Render:
+#    python manage.py collectstatic --noinput && gunicorn Friend.wsgi:application
