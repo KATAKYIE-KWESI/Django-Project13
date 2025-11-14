@@ -10,18 +10,13 @@ from pathlib import Path
 # ============================
 # BASE DIRECTORY
 # ============================
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent  # points to Project13
 
 # ============================
 # SECURITY SETTINGS
 # ============================
-# Secret key from environment (set in Render)
 SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
-
-# Debug off on Render
 DEBUG = os.environ.get("RENDER") != "true"
-
-# Allowed hosts: use Render host if available
 ALLOWED_HOSTS = [os.environ.get("RENDER_EXTERNAL_HOSTNAME", "localhost")]
 
 # ============================
@@ -34,7 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Page',  # Your app
+    'Page',
 ]
 
 # ============================
@@ -42,10 +37,7 @@ INSTALLED_APPS = [
 # ============================
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-
-    # Whitenoise must come right after SecurityMiddleware
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # right after SecurityMiddleware
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -66,7 +58,7 @@ WSGI_APPLICATION = 'Friend.wsgi.application'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [BASE_DIR / 'templates'],  # project root templates
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -79,9 +71,8 @@ TEMPLATES = [
 ]
 
 # ============================
-# DATABASE CONFIG
+# DATABASE
 # ============================
-# Default: SQLite
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -89,7 +80,6 @@ DATABASES = {
     }
 }
 
-# Overwrite with Postgres if DATABASE_URL provided (Render)
 DATABASE_URL = os.environ.get("DATABASE_URL")
 if DATABASE_URL:
     DATABASES['default'] = dj_database_url.config(
@@ -120,14 +110,11 @@ USE_TZ = True
 # STATIC FILES
 # ============================
 STATIC_URL = '/static/'
-
-# Where collectstatic puts files
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Additional static files folder (dev)
-STATICFILES_DIRS = [BASE_DIR / "static"]
+# Keep static folder in project root
+STATICFILES_DIRS = [BASE_DIR / "static"] if (BASE_DIR / "static").exists() else []
 
-# Whitenoise storage for production
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # ============================
@@ -149,8 +136,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # ============================
 # Render-specific notes
 # ============================
-# 1. Add Render environment variables:
-#    - SECRET_KEY
-#    - DATABASE_URL (optional if using Postgres)
-# 2. Start command on Render:
-#    python manage.py collectstatic --noinput && gunicorn Friend.wsgi:application
+# Environment variables to add on Render:
+# - SECRET_KEY
+# - DATABASE_URL (if using Postgres)
+# Start command on Render:
+# cd Friend && python manage.py collectstatic --noinput && gunicorn Friend.wsgi:application
+
+
