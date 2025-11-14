@@ -10,14 +10,22 @@ from pathlib import Path
 # ============================
 # BASE DIRECTORY
 # ============================
-BASE_DIR = Path(__file__).resolve().parent.parent  # points to Project13
+BASE_DIR = Path(__file__).resolve().parent.parent.parent  # points to Project13
 
 # ============================
 # SECURITY SETTINGS
-# ============================
 SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
 DEBUG = os.environ.get("RENDER") != "true"
-ALLOWED_HOSTS = [os.environ.get("RENDER_EXTERNAL_HOSTNAME", "localhost")]
+
+# ALLOWED_HOSTS for both local and Render
+ALLOWED_HOSTS = [
+    os.environ.get("RENDER_EXTERNAL_HOSTNAME"),  # Render hostname
+    "localhost",
+    "127.0.0.1",  # needed for local dev
+]
+
+# Remove None entries if environment variable not set
+ALLOWED_HOSTS = [host for host in ALLOWED_HOSTS if host]
 
 # ============================
 # INSTALLED APPS
