@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{% static 'styles4.css' %}">
 </head>
 <body>
-   <a href="{% url 'firstpage' %}">Go back</a> <h2>Update Profile Picture</h2>
+    <h2>Update Profile Picture</h2>
 
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
@@ -18,12 +18,15 @@
         <p class="note">
             Note: After uploading, please go back and refresh the page to see your new profile picture.
         </p>
-    </form>
+
 
     {% if user.profile.profile_pic %}
         <p>Current Profile Picture:</p>
         <img src="{{ user.profile.profile_pic.url }}" width="120" height="120" style="border-radius: 50%;">
     {% endif %}
+
+    </form>
+
     
 </body>
 </html>
