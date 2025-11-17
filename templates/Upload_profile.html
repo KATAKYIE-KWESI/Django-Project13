@@ -7,9 +7,14 @@
     <link rel="stylesheet" href="{% static 'styles4.css' %}">
 </head>
 <body>
-    <h2>Update Profile Picture</h2>
+
+    <a href="{% url 'firstpage' %}"> Go back</a>
+
+
 
     <form method="POST" enctype="multipart/form-data">
+        <h2>Update Profile Picture</h2>
+
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Upload</button>
