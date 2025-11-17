@@ -13,7 +13,9 @@ body {
 
 a{
  text-decoration: none;
- margin: 50px 20px;
+ margin: 10px 20px;
+ font-weight: bold;
+ font-size: 20px;
 
 }
 
@@ -107,7 +109,7 @@ img {
 
 /* Refresh note message */
 .note {
-    margin-top: 15px;
+    margin: 5px -10px;
     color: #e67e22;
     background-color: #fff3cd;
     border: 1px solid #ffeeba;
