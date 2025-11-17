@@ -140,7 +140,7 @@ def firstpage(request):
     sent_requests = FriendRequest.objects.filter(sender=request.user)
 
     # Notifications for current user
-    notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
+    notifications = Notification.objects.filter(sender=request.user, is_read=False).order_by('-created_at')
     unread_count = notifications.count()
 
     return render(request, 'firstpage.html', {
@@ -175,7 +175,7 @@ def accept_request(request, request_id):
 
     # Create notification for sender
     Notification.objects.create(
-        user=fr.sender,
+        sender=fr.sender,
         message=f"{request.user.username} accepted your friend request!"
     )
 
@@ -191,7 +191,7 @@ def decline_request(request, request_id):
 
     # Create notification for sender
     Notification.objects.create(
-        user=fr.sender,
+        sender=fr.sender,
         message=f"{request.user.username} declined your friend request."
     )
 
@@ -202,7 +202,7 @@ def decline_request(request, request_id):
 #Notifications view
 @login_required
 def notifications_view(request):
-    notifications = Notification.objects.filter(user=request.user).order_by('-created_at')
+    notifications = Notification.objects.filter(sender=request.user).order_by('-created_at')
     # Mark all as read when user opens page
     notifications.update(is_read=True)
     return render(request, 'notifications.html', {'notifications': notifications})

@@ -61,14 +61,11 @@ class FriendRequest(models.Model):
 #Notifications Model
 
 class Notification(models.Model):
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='notifications'
-    )
+    sender = models.ForeignKey(User, related_name='sent_notifications', blank=True, null=True, on_delete=models.CASCADE)
     message = models.CharField(max_length=255)
     is_read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
+
     def __str__(self):
-        return f"To: {self.user.username} - {self.message[:30]}"
+        return f"To: {self.sender.username} - {self.message[:30]}"

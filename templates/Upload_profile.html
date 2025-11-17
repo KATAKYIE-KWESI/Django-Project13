@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{% static 'styles4.css' %}">
 </head>
 <body>
-    <h2>Update Profile Picture</h2>
+   <a href="{% url 'firstpage' %}">Go back</a> <h2>Update Profile Picture</h2>
 
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
@@ -24,5 +24,6 @@
         <p>Current Profile Picture:</p>
         <img src="{{ user.profile.profile_pic.url }}" width="120" height="120" style="border-radius: 50%;">
     {% endif %}
+    
 </body>
 </html>
