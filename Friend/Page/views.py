@@ -1,10 +1,12 @@
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
-from django.contrib import messages
-from .models import Profile
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404
-from .forms import PostForm
+from django.contrib import messages
+from .models import Post, Profile, FriendRequest
+from .forms import ProfilePicForm
+from django.contrib.auth.models import User
+from .models import Post, FriendRequest
+
 
 
 def register(request):
@@ -115,18 +117,10 @@ def delete_post(request, post_id):
     if request.method == 'POST':
         post.delete()
         return redirect('firstpage')
+
     return render(request, 'confirm_delete.html', {'post': post})
 
 
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from .models import Post, Profile, FriendRequest
-from .forms import ProfilePicForm
-from django.contrib.auth.models import User
-from .models import Post, FriendRequest
-from .models import Notification
 
 @login_required
 def firstpage(request):

@@ -43,12 +43,7 @@ class Post(models.Model):
 
 
 class FriendRequest(models.Model):
-    STATUS_CHOICES = [
-        ('pending', 'Pending'),
-        ('accepted', 'Accepted'),
-        ('declined', 'Declined')
-    ]
-
+    STATUS_CHOICES = [  ('pending', 'Pending'),  ('accepted', 'Accepted'), ('declined', 'Declined') ]
     sender = models.ForeignKey(User, related_name='sent_requests', on_delete=models.CASCADE)
     receiver = models.ForeignKey(User, related_name='received_requests', on_delete=models.CASCADE)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
